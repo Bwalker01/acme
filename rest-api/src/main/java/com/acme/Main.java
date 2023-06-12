@@ -3,18 +3,12 @@ package com.acme;
 import static spark.Spark.get;
 import static spark.Spark.port;
 
-import java.io.File;
-
-import io.github.cdimascio.dotenv.Dotenv;
-
 public class Main 
 {
     public static void main( String[] args )
     {
         /*Initialising Listening Port*/
-        Boolean isLocal = new File(".env").exists();
-        Dotenv dotenv = isLocal ? Dotenv.configure().load() : null;
-        port(isLocal ? Integer.parseInt(dotenv.get("DEFAULT_PORT", "4567")) : getHerokuAssignedPort());
+        port(getHerokuAssignedPort());
 
         /*Setting the routes*/
         get("/items", (request, response) -> {
