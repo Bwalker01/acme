@@ -9,5 +9,9 @@ public class Main
         get("/items", (request, response) -> {
             return "The item is an apple.";
         });
+
+        get("/items/:name", (request, response) -> {
+            return "The item is: " + request.params(":name");
+        });
     }
 }
