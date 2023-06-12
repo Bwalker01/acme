@@ -1,1 +1,1 @@
-web: java Main
+web: java target/classes/com/acme/Main.class
