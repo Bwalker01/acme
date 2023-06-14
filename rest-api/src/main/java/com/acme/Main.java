@@ -11,8 +11,8 @@ public class Main
         port(getHerokuAssignedPort());
 
         /*Setting the routes*/
-        get("/items", (request, response) -> {
-            return "The item is an apple.";
+        get("/products", (request, response) -> {
+            return "The product is an apple.";
         });
     }
 
