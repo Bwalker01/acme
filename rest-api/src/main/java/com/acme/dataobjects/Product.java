@@ -1,6 +1,7 @@
 package com.acme.dataobjects;
 
 import com.acme.utility.InvalidProductException;
+import static com.acme.utility.GeneralUtil.round;
 
 public class Product {
     private final String barcode;
@@ -11,7 +12,7 @@ public class Product {
         validateProduct(barcode, name, price);
         this.barcode = barcode;
         this.name = name;
-        this.price = Math.round(price * 100.0) / 100.0;
+        this.price = round(price);
     }
 
     private static void validateProduct(String barcode, String name, double price) {

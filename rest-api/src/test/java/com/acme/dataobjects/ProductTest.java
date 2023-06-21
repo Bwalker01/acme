@@ -36,52 +36,52 @@ public class ProductTest {
     }
 
     @Test
-    public void createIncompleteProduct_NullName() {
+    public void createInvalidProduct_NullName() {
         assertThatThrownBy(() -> {
             new Product("0123456789015", null, 1);
-        }).isInstanceOf(InvalidProductException.class).hasMessage("Incomplete Product: product has no name.");
+        }).isInstanceOf(InvalidProductException.class).hasMessage("Invalid Product: product has no name.");
     }
 
     @Test
-    public void createIncompleteProduct_EmptyName() {
+    public void createInvalidProduct_EmptyName() {
         assertThatThrownBy(() -> {
             new Product("0123456789015", "", 1);
-        }).isInstanceOf(InvalidProductException.class).hasMessage("Incomplete Product: product has no name.");
+        }).isInstanceOf(InvalidProductException.class).hasMessage("Invalid Product: product has no name.");
     }
 
     @Test
-    public void createIncompleteProduct_NullBarcode() {
+    public void createInvalidProduct_NullBarcode() {
         assertThatThrownBy(() -> {
             new Product(null, "Item", 1);
-        }).isInstanceOf(InvalidProductException.class).hasMessage("Incomplete Product: product has no barcode.");
+        }).isInstanceOf(InvalidProductException.class).hasMessage("Invalid Product: product has no barcode.");
     }
 
     @Test
-    public void createIncompleteProduct_EmptyBarcode() {
+    public void createInvalidProduct_EmptyBarcode() {
         assertThatThrownBy(() -> {
             new Product("", "Item", 1);
-        }).isInstanceOf(InvalidProductException.class).hasMessage("Incomplete Product: product has no barcode.");
+        }).isInstanceOf(InvalidProductException.class).hasMessage("Invalid Product: product has no barcode.");
     }
 
     @Test
-    public void createIncompleteProduct_PriceIs0() {
+    public void createInvalidProduct_PriceIs0() {
         assertThatThrownBy(() -> {
             new Product("0123456789015", "Item", 0);
-        }).isInstanceOf(InvalidProductException.class).hasMessage("Incomplete Product: product has no price.");
+        }).isInstanceOf(InvalidProductException.class).hasMessage("Invalid Product: product has no price.");
     }
 
     @Test
-    public void createIncompleteProduct_Barcode13DigitsNoLeading0 () {
+    public void createInvalidProduct_Barcode13DigitsNoLeading0 () {
         assertThatThrownBy(() -> {
             new Product("1234567891234", "Item", 1);
-        }).isInstanceOf(InvalidProductException.class).hasMessage("Incomplete Product: product has invalid barcode.");
+        }).isInstanceOf(InvalidProductException.class).hasMessage("Invalid Product: product has invalid barcode.");
     }
 
     @Test
-    public void createIncompleteProduct_BarcodeTooShort() {
+    public void createInvalidProduct_BarcodeTooShort() {
         assertThatThrownBy(() -> {
             new Product("123", "Item", 1);
-        }).isInstanceOf(InvalidProductException.class).hasMessage("Incomplete Product: product has invalid barcode.");
+        }).isInstanceOf(InvalidProductException.class).hasMessage("Invalid Product: product has invalid barcode.");
     }
 
     @Test
