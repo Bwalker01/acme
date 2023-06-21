@@ -19,23 +19,36 @@
   </properties>
 
   <dependencies>
+
+    <!-- AssertJ for Test assertions (easier to read and understand) -->
+    <dependency>
+      <groupId>org.assertj</groupId>
+      <artifactId>assertj-core</artifactId>
+      <version>3.24.2</version>
+    </dependency>
+
+    <!-- JUnit for Test basics (best standard framework for this) -->
     <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
       <version>4.11</version>
       <scope>test</scope>
     </dependency>
+
+    <!-- Spark to handle the endpoint routing -->
     <dependency>
       <groupId>com.sparkjava</groupId>
       <artifactId>spark-core</artifactId>
       <version>2.1</version>
     </dependency>
-    <!--  GSON for generating JSON output  -->
+
+    <!-- GSON for generating JSON output -->
     <dependency>
       <groupId>com.google.code.gson</groupId>
       <artifactId>gson</artifactId>
       <version>2.3.1</version>
     </dependency>
+
     <!-- Spark uses SLF4J for logging, so we need to a SLF4J binder to see log and error messages. -->
     <dependency>
       <groupId>org.slf4j</groupId>
@@ -78,21 +91,20 @@
         </configuration>
       </plugin>
       <plugin>
+        <!-- tells Heroku how to deploy -->
         <groupId>com.heroku.sdk</groupId>
         <artifactId>heroku-maven-plugin</artifactId>
         <version>2.0.6</version>
         <configuration>
           <jdkVersion>8</jdkVersion>
-          <!-- Use your own application name -->
           <appName>project-acme</appName> 
           <processTypes>
-              <!-- Tell Heroku how to launch your application -->
-              <!-- You might have to remove the ./ in front   -->
               <web>java -jar target/my-app-1.0-jar-with-dependencies.jar</web>
           </processTypes>
         </configuration>
       </plugin>
       <plugin>
+          <!-- Packages all of the dependencies -->
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-dependency-plugin</artifactId>
           <version>3.1.1</version>
