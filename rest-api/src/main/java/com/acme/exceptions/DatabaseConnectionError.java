@@ -1,4 +1,4 @@
-package com.acme.utility;
+package com.acme.exceptions;
 
 public class DatabaseConnectionError extends RuntimeException {
     public DatabaseConnectionError(Throwable e) {

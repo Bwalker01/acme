@@ -1,4 +1,4 @@
-package com.acme.utility;
+package com.acme.exceptions;
 
 public class InvalidDiscountBundleException extends RuntimeException {
     public InvalidDiscountBundleException(String errorMessage) {
