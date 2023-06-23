@@ -31,6 +31,10 @@ jobs:
           mvn --batch-mode -DskipTests package
 
       - name: Test
+        env:
+          TEST_URL: ${{ secrets.TEST_URL }}
+          TEST_USERNAME: ${{ secrets.TEST_USERNAME }}
+          TEST_PASSWORD: ${{ secrets.TEST_PASSWORD }}
         run: |
           cd rest-api
           echo Running unit tests...

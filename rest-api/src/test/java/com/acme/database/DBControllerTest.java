@@ -3,6 +3,7 @@ package com.acme.database;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static com.acme.utility.GeneralUtil.readResults;
+import static com.acme.utility.GeneralUtil.loadEnvVar;
 
 import java.sql.ResultSet;
 
@@ -12,16 +13,15 @@ import org.junit.Test;
 
 import com.acme.exceptions.DatabaseConnectionError;
 
-import io.github.cdimascio.dotenv.Dotenv;
-
 public class DBControllerTest {
-    private static Dotenv env;
     private static DBController dbController;
 
     @BeforeClass
     public static void setup() {
-        env = Dotenv.load();
-        dbController = new DBController(env.get("TEST_URL"), env.get("TEST_USERNAME"), env.get("TEST_PASSWORD"));
+        String TEST_URL = loadEnvVar("TEST_URL");
+        String TEST_USERNAME = loadEnvVar("TEST_USERNAME");
+        String TEST_PASSWORD = loadEnvVar("TEST_PASSWORD");
+        dbController = new DBController(TEST_URL, TEST_USERNAME, TEST_PASSWORD);
         dbController.connect();
     }
 

@@ -5,6 +5,9 @@ import java.sql.SQLException;
 
 import com.acme.exceptions.DatabaseConnectionError;
 
+import io.github.cdimascio.dotenv.Dotenv;
+import io.github.cdimascio.dotenv.DotenvException;
+
 public class GeneralUtil {
     public static double round(double x) {
         int y = (int) Math.round(x * 100);
@@ -17,6 +20,15 @@ public class GeneralUtil {
             return results;
         } catch (SQLException e) {
             throw new DatabaseConnectionError(e);
+        }
+    }
+
+    public static String loadEnvVar(String var) {
+        try {
+            Dotenv env = Dotenv.load();
+            return env.get(var);
+        } catch (DotenvException e) {
+            return System.getenv(var);
         }
     }
 }
