@@ -9,7 +9,7 @@ import static com.acme.dataobjects.DiscountType.PRICE;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.acme.utility.InvalidDiscountBundleException;
+import com.acme.exceptions.InvalidDiscountBundleException;
 
 public class DiscountBundleTest {
     private Product bundleTestProduct;

@@ -3,6 +3,8 @@ package com.acme.utility;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import com.acme.exceptions.DatabaseConnectionError;
+
 public class GeneralUtil {
     public static double round(double x) {
         int y = (int) Math.round(x * 100);

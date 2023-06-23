@@ -1,7 +1,9 @@
 package com.acme.dataobjects;
 
-import com.acme.utility.InvalidDiscountBundleException;
 import static com.acme.utility.GeneralUtil.round;
+
+import com.acme.exceptions.InvalidDiscountBundleException;
+
 import static com.acme.dataobjects.DiscountType.PERCENTAGE;
 import static com.acme.dataobjects.DiscountType.PRICE;
 

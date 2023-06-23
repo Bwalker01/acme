@@ -1,14 +1,15 @@
 package com.acme.database;
 
 import java.util.Arrays;
+
+import com.acme.exceptions.DatabaseConnectionError;
+
 import java.sql.Statement;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-
-import com.acme.utility.DatabaseConnectionError;
 
 public class DBController {
     private final String url;
