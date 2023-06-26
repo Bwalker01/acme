@@ -5,7 +5,6 @@ import java.util.Arrays;
 import com.acme.exceptions.DatabaseConnectionError;
 
 import java.sql.Statement;
-
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
@@ -21,6 +20,15 @@ public class DBController {
         this.url = url;
         this.username = username;
         this.password = password;
+    }
+
+    private static String[] readResults(ResultSet rs) {
+        try {
+            String[] results = { rs.getString(1), rs.getString(2), rs.getString(3) };
+            return results;
+        } catch (SQLException e) {
+            throw new DatabaseConnectionError(e);
+        }
     }
 
     public Boolean connect() {
@@ -41,7 +49,7 @@ public class DBController {
         }
     }
 
-    public ResultSet getItem(String barcode) {
+    public String[] getItem(String barcode) {
         String[] invalidChars = {"(", ")", ";", "$", ","};
         if (Arrays.stream(invalidChars).anyMatch(barcode::contains)) {
             throw new DatabaseConnectionError("Barcode contains invalid characters");
@@ -54,7 +62,7 @@ public class DBController {
             if (!rs.next()) {
                 throw new DatabaseConnectionError("ResultSet is empty.");
             }
-            return rs;
+            return readResults(rs);
         } catch (SQLException e) {
             throw new DatabaseConnectionError(e);
         }
