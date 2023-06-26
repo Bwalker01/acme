@@ -1,4 +1,4 @@
-package com.acme.utility;
+package com.acme.exceptions;
 
 public class InvalidProductException extends RuntimeException {
     public InvalidProductException(String errorMessage) {

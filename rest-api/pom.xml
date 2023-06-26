@@ -20,6 +20,21 @@
 
   <dependencies>
 
+    <!-- Access to dotenv files for unit testing purposes -->
+    <dependency>
+      <groupId>io.github.cdimascio</groupId>
+      <artifactId>dotenv-java</artifactId>
+      <version>3.0.0</version>
+    </dependency>
+
+
+    <!-- Database Drivers to access the remote db -->
+    <dependency>
+      <groupId>org.postgresql</groupId>
+      <artifactId>postgresql</artifactId>
+      <version>42.6.0</version>
+    </dependency>
+
     <!-- AssertJ for Test assertions (easier to read and understand) -->
     <dependency>
       <groupId>org.assertj</groupId>

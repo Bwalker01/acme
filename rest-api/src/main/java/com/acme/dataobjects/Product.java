@@ -1,7 +1,8 @@
 package com.acme.dataobjects;
 
-import com.acme.utility.InvalidProductException;
 import static com.acme.utility.GeneralUtil.round;
+
+import com.acme.exceptions.InvalidProductException;
 
 public class Product {
     private final String barcode;

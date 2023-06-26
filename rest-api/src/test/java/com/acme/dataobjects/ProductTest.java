@@ -6,7 +6,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.acme.utility.InvalidProductException;
+import com.acme.exceptions.InvalidProductException;
 
 public class ProductTest {
     
