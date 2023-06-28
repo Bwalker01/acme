@@ -5,6 +5,7 @@ import static spark.Spark.port;
 import static spark.Spark.post;
 
 import com.acme.dataobjects.CreditCard;
+import com.acme.dataobjects.Product;
 import com.google.gson.Gson;
 
 import java.io.BufferedReader;
@@ -19,6 +20,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.Part;
 import javax.swing.text.html.HTMLDocument.Iterator;
 import javax.xml.namespace.QName;
 
@@ -44,20 +46,31 @@ public class Main
             return "The item is: " + request.params(":name");
         });
 
+        // post("/barcode", (request, response) -> {
+        //     String barcode = "123456789055";
+        //     Product test = getItem();
+        //     response.body(barcode);
+            
+            
+            
+        //     return response.body();
+
+        // });
+
         post("/creditCard", (request, response) -> {
             // Gson g = new Gson();  
             // g.toJson(request.body()); 
 
             String defaultRequestsBody = request.body();
           
-            String requestBody = defaultRequestsBody.replaceAll("\"" , "").replaceAll("\\{" , "").replaceAll("\\}" , "");
+            String requestBody = defaultRequestsBody.replaceAll("\"" , "").replaceAll("\\{" , "").replaceAll("\\}" , "").replaceAll("\n" , "");
             String[] allParams = requestBody.split(",");
 
             HashMap<String,String> itemList = new HashMap<String,String>();
         
             for (String pair : allParams) {
                 String[] keyValue = pair.split(":");
-                itemList.put(keyValue[0],keyValue[1]);
+                itemList.put(keyValue[0],keyValue[1].trim());
             }
                
             // CreditCard usersCard = new CreditCard();
@@ -68,6 +81,13 @@ public class Main
 
             response.type("application/json");
             System.out.println(itemList.get("amount"));
+            System.out.println(itemList.get("creditCardNumber"));
+            System.out.println(itemList.get("expiryDate"));
+            System.out.println(itemList.get("cvc"));
+            System.out.println(itemList.get("address"));
+            System.out.println(itemList.get("postcode"));
+            System.out.println(itemList.get("accountHolderName"));
+
             return new Gson().toJsonTree(itemList);
         });
     }
