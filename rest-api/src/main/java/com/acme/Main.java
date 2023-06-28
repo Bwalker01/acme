@@ -66,11 +66,11 @@ public class Main
             String requestBody = defaultRequestsBody.replaceAll("\"" , "").replaceAll("\\{" , "").replaceAll("\\}" , "").replaceAll("\n" , "");
             String[] allParams = requestBody.split(",");
 
-            HashMap<String,String> itemList = new HashMap<String,String>();
+            HashMap<String,String> creditInfo = new HashMap<String,String>();
         
             for (String pair : allParams) {
                 String[] keyValue = pair.split(":");
-                itemList.put(keyValue[0],keyValue[1].trim());
+                creditInfo.put(keyValue[0],keyValue[1].trim());
             }
                
             // CreditCard usersCard = new CreditCard();
@@ -80,15 +80,15 @@ public class Main
             // return request.body();
 
             response.type("application/json");
-            System.out.println(itemList.get("amount"));
-            System.out.println(itemList.get("creditCardNumber"));
-            System.out.println(itemList.get("expiryDate"));
-            System.out.println(itemList.get("cvc"));
-            System.out.println(itemList.get("address"));
-            System.out.println(itemList.get("postcode"));
-            System.out.println(itemList.get("accountHolderName"));
+            System.out.println(creditInfo.get("amount"));
+            System.out.println(creditInfo.get("creditCardNumber"));
+            System.out.println(creditInfo.get("expiryDate"));
+            System.out.println(creditInfo.get("cvc"));
+            System.out.println(creditInfo.get("address"));
+            System.out.println(creditInfo.get("postcode"));
+            System.out.println(creditInfo.get("accountHolderName"));
 
-            return new Gson().toJsonTree(itemList);
+            return new Gson().toJsonTree(creditInfo);
         });
     }
 
