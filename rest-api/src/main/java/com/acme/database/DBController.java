@@ -23,6 +23,15 @@ public class DBController {
         this.password = password;
     }
 
+    private static String[] readResults(ResultSet rs) {
+        try {
+            String[] results = { rs.getString(1), rs.getString(2), rs.getString(3) };
+            return results;
+        } catch (SQLException e) {
+            throw new DatabaseConnectionError(e);
+        }
+    }
+
     public Boolean connect() {
         try {
             this.connection = DriverManager.getConnection(url, username, password);
@@ -41,7 +50,7 @@ public class DBController {
         }
     }
 
-    public ResultSet getItem(String barcode) {
+    public String[] getItem(String barcode) {
         String[] invalidChars = {"(", ")", ";", "$", ","};
         if (Arrays.stream(invalidChars).anyMatch(barcode::contains)) {
             throw new DatabaseConnectionError("Barcode contains invalid characters");
@@ -54,7 +63,7 @@ public class DBController {
             if (!rs.next()) {
                 throw new DatabaseConnectionError("ResultSet is empty.");
             }
-            return rs;
+            return readResults(rs);
         } catch (SQLException e) {
             throw new DatabaseConnectionError(e);
         }

@@ -2,10 +2,6 @@ package com.acme.database;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static com.acme.utility.GeneralUtil.readResults;
-import static com.acme.utility.GeneralUtil.loadEnvVar;
-
-import java.sql.ResultSet;
 
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
@@ -18,23 +14,21 @@ public class DBControllerTest {
 
     @BeforeClass
     public static void setup() {
-        String TEST_URL = loadEnvVar("TEST_URL");
-        String TEST_USERNAME = loadEnvVar("TEST_USERNAME");
-        String TEST_PASSWORD = loadEnvVar("TEST_PASSWORD");
+        String TEST_URL = System.getenv("ACMEDB_TEST_URL");
+        String TEST_USERNAME = System.getenv("ACMEDB_TEST_USERNAME");
+        String TEST_PASSWORD = System.getenv("ACMEDB_TEST_PASSWORD");
         dbController = new DBController(TEST_URL, TEST_USERNAME, TEST_PASSWORD);
         dbController.connect();
     }
 
     @Test
     public void fetchTestData_12DigitBarcodeFormat() {
-        ResultSet rs = dbController.getItem("123456789055");
-        assertThat(readResults(rs)).containsExactly("123456789055", "Apple", "1.5");
+        assertThat(dbController.getItem("123456789055")).containsExactly("123456789055", "Apple", "1.5");
     }
 
     @Test
     public void fetchTestData_13DigitBarcodeFormat() {
-        ResultSet rs = dbController.getItem("0550987654321");
-        assertThat(readResults(rs)).containsExactly("0550987654321", "Banana", "20");
+        assertThat(dbController.getItem("0550987654321")).containsExactly("0550987654321", "Banana", "20");
     }
 
     @Test
