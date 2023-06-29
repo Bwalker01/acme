@@ -53,7 +53,7 @@ public class Main
 
             CreditCard usersCard = new Gson().fromJson(request.body(), CreditCard.class);
 
-            String postUrl  = "https://acme2pos.azurewebsites.net/payments";// put in your url
+            String postUrl = "https://acme2pos.azurewebsites.net/payments";// put in your url
             Gson gson = new Gson();
 
             HttpClient httpClient = HttpClientBuilder.create().build();
@@ -65,12 +65,12 @@ public class Main
             String authKey = "";//auth key removed for safety need to find away to make more secure
             post.setHeader("x-authkey", authKey);
 
-            HttpResponse  responses = httpClient.execute(post);
+            HttpResponse responses = httpClient.execute(post);
             HttpEntity entity = responses.getEntity();
             String responseString = EntityUtils.toString(entity, "UTF-8");
             System.out.println(responseString);
 
-            
+
             return responseString;
 
         });
