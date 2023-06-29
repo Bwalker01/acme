@@ -1,8 +1,10 @@
 package com.acme.dataobjects;
 
+import java.math.BigInteger;
+
 public class CreditCard {
-    private  Integer amount;
-    private  int creditCardNumber;
+    private  BigInteger amount;
+    private  BigInteger creditCardNumber;
     private  String expiryDate;
     private  Integer cvc;
     private  String address;
@@ -12,7 +14,7 @@ public class CreditCard {
     private  String accountHolderName;
 
 
-    public CreditCard(int amount, int creditCardNumber, String expiryDate, int cvc, String address, String postcode, String accountHolderName){
+    public CreditCard(BigInteger amount, BigInteger creditCardNumber, String expiryDate, int cvc, String address, String postcode, String accountHolderName){
 
         this.amount =  amount;
         this.creditCardNumber = creditCardNumber;
@@ -24,11 +26,11 @@ public class CreditCard {
 
     }
 
-    public int getAmount(){
+    public BigInteger getAmount(){
         return amount;
     }
 
-    public int getCreditCardNumber(){
+    public BigInteger getCreditCardNumber(){
         return creditCardNumber;
     }
 

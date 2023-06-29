@@ -48,7 +48,7 @@ public class Main
 
         // post("/barcode", (request, response) -> {
         //     String barcode = "123456789055";
-        //     Product test = getItem();
+        //     Product test = fetchItem();
         //     response.body(barcode);
             
             
@@ -58,37 +58,18 @@ public class Main
         // });
 
         post("/creditCard", (request, response) -> {
-            // Gson g = new Gson();  
-            // g.toJson(request.body()); 
-
-            String defaultRequestsBody = request.body();
-          
-            String requestBody = defaultRequestsBody.replaceAll("\"" , "").replaceAll("\\{" , "").replaceAll("\\}" , "").replaceAll("\n" , "");
-            String[] allParams = requestBody.split(",");
-
-            HashMap<String,String> creditInfo = new HashMap<String,String>();
-        
-            for (String pair : allParams) {
-                String[] keyValue = pair.split(":");
-                creditInfo.put(keyValue[0],keyValue[1].trim());
-            }
-               
-            // CreditCard usersCard = new CreditCard();
-            
-
-            // return request.body().get("postcode").toString();
-            // return request.body();
-
             response.type("application/json");
-            System.out.println(creditInfo.get("amount"));
-            System.out.println(creditInfo.get("creditCardNumber"));
-            System.out.println(creditInfo.get("expiryDate"));
-            System.out.println(creditInfo.get("cvc"));
-            System.out.println(creditInfo.get("address"));
-            System.out.println(creditInfo.get("postcode"));
-            System.out.println(creditInfo.get("accountHolderName"));
 
-            return new Gson().toJsonTree(creditInfo);
+            CreditCard usersCard = new Gson().fromJson(request.body(), CreditCard.class);
+
+            System.out.println(usersCard.getAmount());
+            System.out.println(usersCard.getCreditCardNumber());
+            System.out.println(usersCard.getExpiryDate());
+            System.out.println(usersCard.getCvc());
+            System.out.println(usersCard.getAddress());
+            System.out.println(usersCard.getPostcode());
+            System.out.println(usersCard.getAccountHolderName());
+            return new Gson().toJsonTree(usersCard);
         });
     }
 
