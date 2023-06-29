@@ -50,12 +50,12 @@ public class Main
 
         post("/creditCard", (request, response) -> {
             response.type("application/json");
-
-            CreditCard usersCard = new Gson().fromJson(request.body(), CreditCard.class);
-
-            String postUrl = "https://acme2pos.azurewebsites.net/payments";// put in your url
             Gson gson = new Gson();
 
+            CreditCard usersCard =  gson.fromJson(request.body(), CreditCard.class);
+
+            String postUrl = "https://acme2pos.azurewebsites.net/payments";// put in your url
+            
             HttpClient httpClient = HttpClientBuilder.create().build();
             HttpPost post = new HttpPost(postUrl);
             StringEntity postingString = new StringEntity(gson.toJson(usersCard));//gson.tojson() converts the creditCard object back to a to json
