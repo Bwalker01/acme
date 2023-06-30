@@ -1,8 +1,9 @@
 package com.acme.database;
 
+import com.acme.dataobjects.DiscountBundle;
 import com.acme.dataobjects.Product;
 
-public class ProductDAO {
+public class ProductDAO implements DAOInterface {
     private DBController db;
 
     public ProductDAO() {
@@ -22,5 +23,9 @@ public class ProductDAO {
         String[] results = db.getItem(barcode);
         db.disconnect();
         return new Product(results[0], results[1], Double.parseDouble(results[2]));
+    }
+
+    public DiscountBundle checkForBundle(String barcode, int quantity) {
+        return null;
     }
 }
