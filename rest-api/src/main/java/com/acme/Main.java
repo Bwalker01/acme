@@ -62,7 +62,8 @@ public class Main
             post.setEntity(postingString);
             post.setHeader("Content-type", "application/json");
 
-            String authKey = "";//auth key removed for safety need to find away to make more secure
+            String authKey = System.getenv("XAUTH_KEY");
+            System.out.println(authKey);//auth key removed for safety need to find away to make more secure
             post.setHeader("x-authkey", authKey);
 
             HttpResponse responses = httpClient.execute(post);
