@@ -1,6 +1,8 @@
 package com.acme.database;
 
 import com.acme.dataobjects.DiscountBundle;
+import static com.acme.dataobjects.DiscountType.*;
+import com.acme.dataobjects.DiscountType;
 import com.acme.dataobjects.Product;
 
 public class ProductDAO implements DAOInterface {
@@ -25,7 +27,19 @@ public class ProductDAO implements DAOInterface {
         return new Product(results[0], results[1], Double.parseDouble(results[2]));
     }
 
-    public DiscountBundle checkForBundle(String barcode, int quantity) {
-        return null;
+    public DiscountBundle checkForBundle(Product product, int quantity) {
+        db.connect();
+        String[] results = db.getDiscount(product.getBarcode(), quantity);
+        db.disconnect();
+        if (results == null) {
+            return null;
+        }
+        DiscountType type;
+        if (Boolean.parseBoolean(results[3])) {
+            type = PERCENTAGE;
+        } else {
+            type = PRICE;
+        }
+        return new DiscountBundle(Integer.parseInt(results[0]), product, Integer.parseInt(results[2]), type, Double.parseDouble(results[4]));
     }
 }

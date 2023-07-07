@@ -8,6 +8,7 @@ import static org.mockito.Mockito.when;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import com.acme.dataobjects.DiscountBundle;
 import com.acme.dataobjects.Product;
 import com.acme.exceptions.InvalidProductException;
 
@@ -38,5 +39,17 @@ public class ProductDAOTest {
         String[] mockedResult = {"1234", "name", "1"};
         when (mockController.getItem("1234")).thenReturn(mockedResult);
         assertThatThrownBy(() -> dao.fetchItem("1234")).isInstanceOf(InvalidProductException.class);
+    }
+
+    @Test
+    public void fetchDiscount_Standard() {
+        Product testProduct = new Product("123456789055", "name", 1);
+        String[] mockedResult = {"2", "123456789055", "2", "true", "5"};
+        when(mockController.getDiscount("123456789055", 2)).thenReturn(mockedResult);
+        DiscountBundle testBundle = dao.checkForBundle(testProduct, 2);
+        assertThat(testBundle.getDiscountId()).isEqualTo(2);
+        assertThat(testBundle.getDiscountAmountFormatted()).isEqualTo("5.00%");
+        assertThat(testBundle.getQuantity()).isEqualTo(2);
+        assertThat(testBundle.getDiscountAmount()).isEqualTo(5);
     }
 }

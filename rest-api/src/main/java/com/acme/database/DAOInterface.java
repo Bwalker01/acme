@@ -5,5 +5,5 @@ import com.acme.dataobjects.Product;
 
 public interface DAOInterface {
     public Product fetchItem(String barcode);
-    public DiscountBundle checkForBundle(String barcode, int quantity);
+    public DiscountBundle checkForBundle(Product product, int quantity);
 }
