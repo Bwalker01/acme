@@ -15,9 +15,11 @@ import com.acme.exceptions.InvalidProductException;
 public class ProductDAOTest {
     private static ProductDAO dao;
     private static DBController mockController;
+    private static Product testProduct;
 
     @BeforeClass
     public static void setup() {
+        testProduct = new Product("123456789055", "name", 1);
         mockController = mock(DBController.class);
         dao = new ProductDAO(mockController);
         when(mockController.connect()).thenReturn(true);
@@ -42,8 +44,7 @@ public class ProductDAOTest {
     }
 
     @Test
-    public void fetchDiscount_Standard() {
-        Product testProduct = new Product("123456789055", "name", 1);
+    public void checkForDiscount_Standard() {
         String[] mockedResult = {"2", "123456789055", "2", "true", "5"};
         when(mockController.getDiscount("123456789055", 2)).thenReturn(mockedResult);
         DiscountBundle testBundle = dao.checkForBundle(testProduct, 2);
@@ -51,5 +52,12 @@ public class ProductDAOTest {
         assertThat(testBundle.getDiscountAmountFormatted()).isEqualTo("5.00%");
         assertThat(testBundle.getQuantity()).isEqualTo(2);
         assertThat(testBundle.getDiscountAmount()).isEqualTo(5);
+    }
+
+    @Test
+    public void checkForDiscount_InvalidQuery() {
+        when(mockController.getDiscount("123456789055", 2)).thenReturn(null);
+        DiscountBundle testBundle = dao.checkForBundle(testProduct, 2);
+        assertThat(testBundle).isNull();
     }
 }
