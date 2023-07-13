@@ -51,9 +51,13 @@ public class Main
 
             Barcodes barcode = gson.fromJson(request.body(), Barcodes.class);
 
-            Product test = productDatabase.fetchItem(barcode.getBarcode());
+            
 
-            listOfItems.add(test);
+            if(barcode.getBarcode() != "END"){
+                Product productFromBarcode = productDatabase.fetchItem(barcode.getBarcode());
+                listOfItems.add(productFromBarcode);
+            }
+            
             return listOfItems;
 
         });
