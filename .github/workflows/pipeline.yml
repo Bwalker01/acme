@@ -32,9 +32,9 @@ jobs:
 
       - name: Test
         env:
-          TEST_URL: ${{ secrets.TEST_URL }}
-          TEST_USERNAME: ${{ secrets.TEST_USERNAME }}
-          TEST_PASSWORD: ${{ secrets.TEST_PASSWORD }}
+          ACMEDB_TEST_URL: ${{ secrets.ACMEDB_TEST_URL }}
+          ACMEDB_TEST_USERNAME: ${{ secrets.ACMEDB_TEST_USERNAME }}
+          ACMEDB_TEST_PASSWORD: ${{ secrets.ACMEDB_TEST_PASSWORD }}
         run: |
           cd rest-api
           echo Running unit tests...
