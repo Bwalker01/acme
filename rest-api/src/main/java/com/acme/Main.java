@@ -3,7 +3,7 @@ package com.acme;
 import static spark.Spark.get;
 import static spark.Spark.port;
 import static spark.Spark.post;
-
+import static spark.Spark.delete;
 import java.util.ArrayList;
 
 import com.acme.dataobjects.Barcodes;
@@ -32,7 +32,7 @@ public class Main
         /*Setting the routes*/
 
         ArrayList<Product> listOfItems = new ArrayList<Product>(); 
-
+        Gson gson = new Gson();
 
         get("/products", (request, response) -> {
             return "The product is an apple.";
@@ -46,7 +46,7 @@ public class Main
         });
 
         post("/barcode", (request, response) -> {
-            Gson gson = new Gson();
+          
             ProductDAO productDatabase = new ProductDAO();
 
             Barcodes barcode = gson.fromJson(request.body(), Barcodes.class);
@@ -57,11 +57,16 @@ public class Main
             return listOfItems;
 
         });
+
+         delete("/deletes", (request, response) -> {
+            listOfItems.remove(listOfItems.size());
+            return listOfItems;
+         });
     }
 
     //     post("/creditCard", (request, response) -> {
     //         response.type("application/json");
-    //         Gson gson = new Gson();
+
 
     //         CreditCard usersCard =  gson.fromJson(request.body(), CreditCard.class);
 
