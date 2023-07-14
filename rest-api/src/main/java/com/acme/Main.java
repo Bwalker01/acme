@@ -66,36 +66,34 @@ public class Main
             listOfItems.remove(listOfItems.size()-1);
             return new Gson().toJsonTree(listOfItems);
         });
-    }
+        
+        post("/creditCard", (request, response) -> {
+            response.type("application/json");
 
-    //     post("/creditCard", (request, response) -> {
-    //         response.type("application/json");
+            CreditCard usersCard =  gson.fromJson(request.body(), CreditCard.class);
 
-
-    //         CreditCard usersCard =  gson.fromJson(request.body(), CreditCard.class);
-
-    //         String postUrl = "https://acme2pos.azurewebsites.net/payments";// put in your url
+            String postUrl = "https://acme2pos.azurewebsites.net/payments";// put in your url
             
-    //         HttpClient httpClient = HttpClientBuilder.create().build();
-    //         HttpPost post = new HttpPost(postUrl);
-    //         StringEntity postingString = new StringEntity(gson.toJson(usersCard));//gson.tojson() converts the creditCard object back to a to json
-    //         post.setEntity(postingString);
-    //         post.setHeader("Content-type", "application/json");
+            HttpClient httpClient = HttpClientBuilder.create().build();
+            HttpPost post = new HttpPost(postUrl);
+            StringEntity postingString = new StringEntity(gson.toJson(usersCard));//gson.tojson() converts the creditCard object back to a to json
+            post.setEntity(postingString);
+            post.setHeader("Content-type", "application/json");
 
-    //         String authKey = System.getenv("XAUTH_KEY");
-    //         System.out.println(authKey);//auth key removed for safety need to find away to make more secure
-    //         post.setHeader("x-authkey", authKey);
+            String authKey = System.getenv("XAUTH_KEY");
+            System.out.println(authKey);//auth key removed for safety need to find away to make more secure
+            post.setHeader("x-authkey", authKey);
 
-    //         HttpResponse responses = httpClient.execute(post);
-    //         HttpEntity entity = responses.getEntity();
-    //         String responseString = EntityUtils.toString(entity, "UTF-8");
-    //         System.out.println(responseString);
+            HttpResponse responses = httpClient.execute(post);
+            HttpEntity entity = responses.getEntity();
+            String responseString = EntityUtils.toString(entity, "UTF-8");
+            System.out.println(responseString);
 
 
-    //         return responseString;
+            return responseString;
 
-    //     });
-    // }
+        });
+    }
 
     static int getHerokuAssignedPort() {
         ProcessBuilder processBuilder = new ProcessBuilder();
