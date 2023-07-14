@@ -5,16 +5,25 @@ import static com.acme.utility.GeneralUtil.round;
 import com.acme.exceptions.InvalidProductException;
 
 public class Product {
-    private final String barcode;
+    private  String barcode;
     private final String name;
     private final double price;
+    private int quantity;
 
+    
     public Product(String barcode, String name, double price) {
         validateProduct(barcode, name, price);
         this.barcode = barcode;
         this.name = name;
         this.price = round(price);
     }
+    public Product(String name, double price, int quantity) {
+        this.name = name;
+        this.price = price;
+        this.quantity = quantity;
+    }
+
+
 
     private static void validateProduct(String barcode, String name, double price) {
         if (barcode == null || barcode.length() == 0) {
@@ -38,6 +47,14 @@ public class Product {
 
     public double getPrice() {
         return price;
+    }
+
+    public int getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
     }
 
     public String getPriceString() {

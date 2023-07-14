@@ -6,12 +6,15 @@ import static spark.Spark.post;
 import static org.mockito.ArgumentMatchers.doubleThat;
 import static spark.Spark.delete;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 
 import com.acme.dataobjects.Barcodes;
 import com.acme.dataobjects.CreditCard;
 import com.acme.dataobjects.ItemResponse;
 import com.acme.dataobjects.Product;
-import com.acme.dataobjects.ProductForList;
+
 import com.google.gson.Gson;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -30,6 +33,7 @@ import com.acme.database.ProductDAO;
 public class Main
 {
     public static double totalPrice;
+    public static int quantity;
     public static void main( String[] args )
     {
         /*Initialising Listening Port*/
@@ -39,7 +43,9 @@ public class Main
 
         /*Setting the routes*/
 
-        ArrayList<ProductForList> listOfItems = new ArrayList<ProductForList>(); 
+        ArrayList<Product> listOfItems = new ArrayList<Product>(); 
+
+         Map<Product, Integer> testMap = new HashMap<>();
         // JSONObject itemsTest = new JSONObject();
 
         Gson gson = new Gson();
@@ -57,16 +63,37 @@ public class Main
             if(barcode.getBarcode() != "END"){
           
                 Product productFromBarcode = productDatabase.fetchItem(barcode.getBarcode());
+
+                
+               
+                // quantity = Collections.frequency(listOfItems, productFromBarcode.getName());
                 
 
-                ProductForList product = new ProductForList(productFromBarcode.getName(), productFromBarcode.getPrice(), 1);
 
+          
 
-                listOfItems.add(product);
+                if(listOfItems.stream().anyMatch(p -> p.getName().equals(productFromBarcode.getName()))){
+                    
+                    Product product = listOfItems.get(listOfItems.indexOf(productFromBarcode)+1);
+
+                    System.out.println(gson.toJsonTree(product));
+
+                }else{
+                    Product product = new Product(productFromBarcode.getName(), productFromBarcode.getPrice(), 1);
+                       listOfItems.add(product);
+                testMap.put(product, 1);
+                }
+
+                // listOfItems.add(product);
+                // testMap.put(product, 1);
+                
+
                 totalPrice += productFromBarcode.getPrice();
                
 
             }
+
+            
             
             // System.out.println(totalPrice);
             ItemResponse finalResponse = new ItemResponse(listOfItems, totalPrice);
