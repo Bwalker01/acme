@@ -7,7 +7,7 @@ import com.acme.exceptions.InvalidProductException;
 public class Product {
     private  String barcode;
     private final String name;
-    private final double price;
+    private double price;
     private int quantity;
 
     
@@ -49,12 +49,16 @@ public class Product {
         return price;
     }
 
+    public void addToPrice(double price){
+        this.price += price;
+    }
+
     public int getQuantity() {
         return quantity;
     }
 
-    public void setQuantity(int quantity) {
-        this.quantity = quantity;
+    public void increaseQuantity() {
+        this.quantity++;
     }
 
     public String getPriceString() {
