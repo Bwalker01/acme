@@ -45,8 +45,6 @@ public class Main
 
         
 
-  
-
         post("/barcode", (request, response) -> {
           
             ProductDAO productDatabase = new ProductDAO();
@@ -68,13 +66,13 @@ public class Main
             // System.out.println(totalPrice);
             ItemResponse finalResponse = new ItemResponse(listOfItems, totalPrice);
             // System.out.println(gson.toJsonTree(testFinalResponse));
-            return new Gson().toJsonTree(finalResponse);
+            return gson.toJsonTree(finalResponse);
 
         });
 
         delete("/remove", (request, response) -> {
             listOfItems.remove(listOfItems.size()-1);
-            return new Gson().toJsonTree(listOfItems);
+            return gson.toJsonTree(listOfItems);
         });
 
         post("/creditCard", (request, response) -> {
