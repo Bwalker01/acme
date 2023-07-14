@@ -43,6 +43,8 @@ public class Main
 
         Gson gson = new Gson();
 
+        
+
   
 
         post("/barcode", (request, response) -> {
@@ -54,16 +56,19 @@ public class Main
             
 
             if(barcode.getBarcode() != "END"){
+          
                 Product productFromBarcode = productDatabase.fetchItem(barcode.getBarcode());
-                // itemsTest.put(productFromBarcode.getName(),productFromBarcode.getPrice())
+                
                 listOfItems.add(productFromBarcode);
                 totalPrice += productFromBarcode.getPrice();
-                // ItemResponse finalResponse = gson.fromJson(request.body(), ItemResponse.class);
+               
+
             }
             
-            System.out.println(totalPrice);
-            
-            return new Gson().toJsonTree(listOfItems);
+            // System.out.println(totalPrice);
+            ItemResponse finalResponse = new ItemResponse(listOfItems, totalPrice);
+            // System.out.println(gson.toJsonTree(testFinalResponse));
+            return new Gson().toJsonTree(finalResponse);
 
         });
 

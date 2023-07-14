@@ -1,25 +1,27 @@
 package com.acme.dataobjects;
 
+import java.util.ArrayList;
+
 public class ItemResponse {
-    private final Product item;
+    private final ArrayList<Product> items;
 
 
-    private final int price;
+    private final double total;
 
-    public ItemResponse(Product item, int price){
-        this.item = item;
-        this.price = price;
+    public ItemResponse(ArrayList<Product> listOfItems, double total){
+        this.items = listOfItems;
+        this.total = total;
     }
 
 
 
-        public Product getItem() {
-        return item;
+        public ArrayList<Product> getItem() {
+        return items;
     }
 
 
-       public int getPrice() {
-        return price;
+       public double getPrice() {
+        return total;
     }
     
 }
