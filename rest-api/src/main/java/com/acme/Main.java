@@ -43,8 +43,7 @@ public class Main
                 Product productFromBarcode = productDatabase.fetchItem(barcode.getBarcode());
                 if(listOfItems.stream().anyMatch(p -> p.getName().equals(productFromBarcode.getName()))){
                     Product product = listOfItems.get(listOfItems.indexOf(productFromBarcode)+1);
-                    product.addToPrice(productFromBarcode.getPrice());
-                    product.increaseQuantity();
+                    product.increaseItem(productFromBarcode.getPrice());
                     System.out.println(gson.toJsonTree(listOfItems));
                 }else{
                     Product product = new Product(productFromBarcode.getName(), productFromBarcode.getPrice(), 1);

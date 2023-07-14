@@ -49,15 +49,14 @@ public class Product {
         return price;
     }
 
-    public void addToPrice(double price){
-        this.price += price;
-    }
+
 
     public int getQuantity() {
         return quantity;
     }
 
-    public void increaseQuantity() {
+    public void increaseItem(double price) {
+        this.price += price;
         this.quantity++;
     }
 
