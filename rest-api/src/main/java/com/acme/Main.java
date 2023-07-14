@@ -58,14 +58,14 @@ public class Main
                 listOfItems.add(productFromBarcode);
             }
             
-            return listOfItems;
+            return new Gson().toJsonTree(listOfItems);
 
         });
 
-         delete("/deletes", (request, response) -> {
-            listOfItems.remove(listOfItems.size());
-            return listOfItems;
-         });
+        delete("/remove", (request, response) -> {
+            listOfItems.remove(listOfItems.size()-1);
+            return new Gson().toJsonTree(listOfItems);
+        });
     }
 
     //     post("/creditCard", (request, response) -> {
