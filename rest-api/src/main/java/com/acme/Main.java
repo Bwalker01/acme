@@ -11,6 +11,7 @@ import com.acme.dataobjects.Barcodes;
 import com.acme.dataobjects.CreditCard;
 import com.acme.dataobjects.ItemResponse;
 import com.acme.dataobjects.Product;
+import com.acme.dataobjects.ProductForList;
 import com.google.gson.Gson;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -38,7 +39,7 @@ public class Main
 
         /*Setting the routes*/
 
-        ArrayList<Product> listOfItems = new ArrayList<Product>(); 
+        ArrayList<ProductForList> listOfItems = new ArrayList<ProductForList>(); 
         // JSONObject itemsTest = new JSONObject();
 
         Gson gson = new Gson();
@@ -57,7 +58,11 @@ public class Main
           
                 Product productFromBarcode = productDatabase.fetchItem(barcode.getBarcode());
                 
-                listOfItems.add(productFromBarcode);
+
+                ProductForList product = new ProductForList(productFromBarcode.getName(), productFromBarcode.getPrice(), 1);
+
+
+                listOfItems.add(product);
                 totalPrice += productFromBarcode.getPrice();
                
 
