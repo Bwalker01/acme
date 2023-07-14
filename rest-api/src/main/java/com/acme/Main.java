@@ -3,11 +3,13 @@ package com.acme;
 import static spark.Spark.get;
 import static spark.Spark.port;
 import static spark.Spark.post;
+import static org.mockito.ArgumentMatchers.doubleThat;
 import static spark.Spark.delete;
 import java.util.ArrayList;
 
 import com.acme.dataobjects.Barcodes;
 import com.acme.dataobjects.CreditCard;
+import com.acme.dataobjects.ItemResponse;
 import com.acme.dataobjects.Product;
 import com.google.gson.Gson;
 import org.apache.http.HttpEntity;
@@ -17,6 +19,8 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.util.EntityUtils;
+import org.json.JSONObject;
+
 import com.acme.database.ProductDAO;
 
 
@@ -24,26 +28,22 @@ import com.acme.database.ProductDAO;
 
 public class Main
 {
+    public static double totalPrice;
     public static void main( String[] args )
     {
         /*Initialising Listening Port*/
         port(getHerokuAssignedPort());
 
+        
+
         /*Setting the routes*/
 
         ArrayList<Product> listOfItems = new ArrayList<Product>(); 
+        // JSONObject itemsTest = new JSONObject();
+
         Gson gson = new Gson();
 
-        get("/products", (request, response) -> {
-            return "The product is an apple.";
-        });
-        get("/items", (request, response) -> {
-            return "The item is an apple.";
-        });
-
-        get("/items/:name", (request, response) -> {
-            return "The item is: " + request.params(":name");
-        });
+  
 
         post("/barcode", (request, response) -> {
           
@@ -55,8 +55,13 @@ public class Main
 
             if(barcode.getBarcode() != "END"){
                 Product productFromBarcode = productDatabase.fetchItem(barcode.getBarcode());
+                // itemsTest.put(productFromBarcode.getName(),productFromBarcode.getPrice())
                 listOfItems.add(productFromBarcode);
+                totalPrice += productFromBarcode.getPrice();
+                // ItemResponse finalResponse = gson.fromJson(request.body(), ItemResponse.class);
             }
+            
+            System.out.println(totalPrice);
             
             return new Gson().toJsonTree(listOfItems);
 
@@ -66,7 +71,7 @@ public class Main
             listOfItems.remove(listOfItems.size()-1);
             return new Gson().toJsonTree(listOfItems);
         });
-        
+
         post("/creditCard", (request, response) -> {
             response.type("application/json");
 
@@ -102,4 +107,8 @@ public class Main
         } 
         return 4567;  
     }
+
+
+
+
 }
