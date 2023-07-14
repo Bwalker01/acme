@@ -44,7 +44,6 @@ public class Main
                 if(listOfItems.stream().anyMatch(p -> p.getName().equals(productFromBarcode.getName()))){
                     Product product = listOfItems.get(listOfItems.indexOf(productFromBarcode)+1);
                     product.increaseItem(productFromBarcode.getPrice());
-                    System.out.println(gson.toJsonTree(listOfItems));
                 }else{
                     Product product = new Product(productFromBarcode.getName(), productFromBarcode.getPrice(), 1);
                        listOfItems.add(product);
@@ -62,9 +61,6 @@ public class Main
             if(listOfItems.size()>=1){
                 Product product = listOfItems.get(listOfItems.size()-1);
                 double priceOfItem = product.getPrice()/product.getQuantity();
-                System.out.println(priceOfItem);
-
-
                 if(product.getQuantity() > 1){
                     product.decreaseItem(priceOfItem);
                     totalPrice -= priceOfItem;
