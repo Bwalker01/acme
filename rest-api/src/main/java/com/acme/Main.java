@@ -45,6 +45,7 @@ public class Main
                     Product product = listOfItems.get(listOfItems.indexOf(productFromBarcode)+1);
                     product.addToPrice(productFromBarcode.getPrice());
                     product.increaseQuantity();
+                    System.out.println(gson.toJsonTree(listOfItems));
                 }else{
                     Product product = new Product(productFromBarcode.getName(), productFromBarcode.getPrice(), 1);
                        listOfItems.add(product);
@@ -58,10 +59,23 @@ public class Main
 
         });
 
-        // delete("/remove", (request, response) -> {
-        //     listOfItems.remove(listOfItems.size()-1);
-        //     return gson.toJsonTree(listOfItems);
-        // });
+        delete("/remove", (request, response) -> {
+            if(listOfItems.size()>=1){
+                Product product = listOfItems.get(listOfItems.size()-1);
+                double priceOfItem = product.getPrice()/product.getQuantity();
+                System.out.println(priceOfItem);
+
+
+                if(product.getQuantity() > 1){
+                    product.decreaseItem(priceOfItem);
+                    totalPrice -= priceOfItem;
+                }else{
+                listOfItems.remove(listOfItems.size()-1);
+                }
+            }
+            ItemResponse finalResponse = new ItemResponse(listOfItems, totalPrice);
+            return gson.toJsonTree(finalResponse);
+        });
 
         post("/creditCard", (request, response) -> {
             response.type("application/json");

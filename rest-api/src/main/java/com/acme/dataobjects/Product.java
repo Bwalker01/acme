@@ -61,6 +61,11 @@ public class Product {
         this.quantity++;
     }
 
+    public void decreaseItem(double price) {
+        this.price -= price;
+        this.quantity--;
+    }
+
     public String getPriceString() {
         return String.format("£%.2f", this.price);
     }
