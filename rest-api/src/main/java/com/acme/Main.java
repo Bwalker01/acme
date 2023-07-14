@@ -9,6 +9,7 @@ import com.acme.dataobjects.CreditCard;
 import com.acme.dataobjects.ItemResponse;
 import com.acme.dataobjects.Product;
 import com.google.gson.Gson;
+
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
@@ -33,6 +34,7 @@ public class Main
 
         /*setting global variables/objects*/
         ArrayList<Product> listOfItems = new ArrayList<Product>(); 
+        // Gson gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().create();
         Gson gson = new Gson();
 
         /*Setting the routes*/
@@ -40,42 +42,39 @@ public class Main
             ProductDAO productDatabase = new ProductDAO();
             Barcodes barcode = gson.fromJson(request.body(), Barcodes.class);
             if(barcode.getBarcode() != "END"){
-                Product productFromBarcode = productDatabase.fetchItem(barcode.getBarcode());
-                if(listOfItems.stream().anyMatch(p -> p.getName().equals(productFromBarcode.getName()))){
-                    Product product = listOfItems.get(listOfItems.indexOf(productFromBarcode)+1);
-                    product.increaseItem(productFromBarcode.getPrice());
-                }else{
-                    Product product = new Product(productFromBarcode.getName(), productFromBarcode.getPrice(), 1);
-                       listOfItems.add(product);
-     
+                for (Product product : listOfItems) {
+                    if (product.getBarcode().equals(barcode.getBarcode())) {
+                        product.increaseItem();
+                        ItemResponse finalResponse = new ItemResponse(listOfItems, calculateListPrice(listOfItems));
+                        return gson.toJsonTree(finalResponse);
+                    }
                 }
-                totalPrice += productFromBarcode.getPrice();
+                listOfItems.add(productDatabase.fetchItem(barcode.getBarcode()));
+                ItemResponse finalResponse = new ItemResponse(listOfItems, calculateListPrice(listOfItems));
+                return gson.toJsonTree(finalResponse);
             }
-
-            ItemResponse finalResponse = new ItemResponse(listOfItems, totalPrice);
+            ItemResponse finalResponse = new ItemResponse(listOfItems, calculateListPrice(listOfItems));
+            // listOfItems.clear();
             return gson.toJsonTree(finalResponse);
-
         });
 
         delete("/remove", (request, response) -> {
             if(listOfItems.size()>=1){
                 Product product = listOfItems.get(listOfItems.size()-1);
-                double priceOfItem = product.getPrice()/product.getQuantity();
                 if(product.getQuantity() > 1){
-                    product.decreaseItem(priceOfItem);
-                    totalPrice -= priceOfItem;
-                }else{
-                listOfItems.remove(listOfItems.size()-1);
+                    product.decreaseItem();
+                } else {
+                    listOfItems.remove(listOfItems.size()-1);
                 }
             }
-            ItemResponse finalResponse = new ItemResponse(listOfItems, totalPrice);
+            ItemResponse finalResponse = new ItemResponse(listOfItems, calculateListPrice(listOfItems));
             return gson.toJsonTree(finalResponse);
         });
 
         post("/creditCard", (request, response) -> {
             response.type("application/json");
 
-            CreditCard usersCard =  gson.fromJson(request.body(), CreditCard.class);
+            CreditCard usersCard = gson.fromJson(request.body(), CreditCard.class);
 
             String postUrl = "https://acme2pos.azurewebsites.net/payments";// put in your url
             
@@ -106,6 +105,14 @@ public class Main
             return Integer.parseInt(processBuilder.environment().get("PORT"));
         } 
         return 4567;  
+    }
+
+    static double calculateListPrice(ArrayList<Product> items) {
+        double total = 0;
+        for (Product product : items) {
+            total += product.getTotalPrice();
+        }
+        return total;
     }
 
 

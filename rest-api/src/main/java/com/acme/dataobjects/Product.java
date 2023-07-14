@@ -5,7 +5,8 @@ import static com.acme.utility.GeneralUtil.round;
 import com.acme.exceptions.InvalidProductException;
 
 public class Product {
-    private  String barcode;
+    private final transient String barcode;
+    private final transient double eachPrice;
     private final String name;
     private double price;
     private int quantity;
@@ -15,15 +16,10 @@ public class Product {
         validateProduct(barcode, name, price);
         this.barcode = barcode;
         this.name = name;
-        this.price = round(price);
+        this.eachPrice = round(price);
+        this.price = this.eachPrice;
+        this.quantity = 1;
     }
-    public Product(String name, double price, int quantity) {
-        this.name = name;
-        this.price = price;
-        this.quantity = quantity;
-    }
-
-
 
     private static void validateProduct(String barcode, String name, double price) {
         if (barcode == null || barcode.length() == 0) {
@@ -49,23 +45,29 @@ public class Product {
         return price;
     }
 
-
+    public double getTotalPrice() {
+        return price;
+    }
 
     public int getQuantity() {
         return quantity;
     }
 
-    public void increaseItem(double price) {
-        this.price += price;
+    public void increaseItem() {
         this.quantity++;
+        this.price += this.eachPrice;
     }
 
-    public void decreaseItem(double price) {
-        this.price -= price;
+    public void decreaseItem() {
         this.quantity--;
+        this.price -= this.eachPrice;
     }
 
     public String getPriceString() {
+        return String.format("£%.2f", this.eachPrice);
+    }
+
+    public String getTotalPriceString() {
         return String.format("£%.2f", this.price);
     }
 }
