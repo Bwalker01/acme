@@ -41,7 +41,8 @@ public class Main
         post("/barcode", (request, response) -> {
             ProductDAO productDatabase = new ProductDAO();
             Barcodes barcode = gson.fromJson(request.body(), Barcodes.class);
-            if(barcode.getBarcode() != "END"){
+            System.out.println(barcode.getBarcode());
+            if(!barcode.getBarcode().equals("END")){
                 for (Product product : listOfItems) {
                     if (product.getBarcode().equals(barcode.getBarcode())) {
                         product.increaseItem();
