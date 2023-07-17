@@ -1,12 +1,15 @@
 package com.acme;
-
-import static spark.Spark.get;
 import static spark.Spark.port;
 import static spark.Spark.post;
+import static spark.Spark.delete;
 
+import java.util.ArrayList;
+import com.acme.dataobjects.Barcodes;
 import com.acme.dataobjects.CreditCard;
+import com.acme.dataobjects.ItemResponse;
 import com.acme.dataobjects.Product;
 import com.google.gson.Gson;
+
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
@@ -14,45 +17,64 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.util.EntityUtils;
+import com.acme.database.ProductDAO;
 
 
 
 
-public class Main 
+public class Main
 {
+    public static double totalPrice;
+    public static int quantity;
     public static void main( String[] args )
     {
         /*Initialising Listening Port*/
         port(getHerokuAssignedPort());
+        
+
+        /*setting global variables/objects*/
+        ArrayList<Product> listOfItems = new ArrayList<Product>(); 
+        // Gson gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().create();
+        Gson gson = new Gson();
 
         /*Setting the routes*/
-        get("/products", (request, response) -> {
-            return "The product is an apple.";
-        });
-        get("/items", (request, response) -> {
-            return "The item is an apple.";
+        post("/barcode", (request, response) -> {
+            ProductDAO productDatabase = new ProductDAO();
+            Barcodes barcode = gson.fromJson(request.body(), Barcodes.class);
+            if(!barcode.getBarcode().equals("END")){
+                for (Product product : listOfItems) {
+                    if (product.getBarcode().equals(barcode.getBarcode())) {
+                        product.increaseItem();
+                        ItemResponse finalResponse = new ItemResponse(listOfItems, calculateListPrice(listOfItems));
+                        return gson.toJsonTree(finalResponse);
+                    }
+                }
+                listOfItems.add(productDatabase.fetchItem(barcode.getBarcode()));
+                ItemResponse finalResponse = new ItemResponse(listOfItems, calculateListPrice(listOfItems));
+                return gson.toJsonTree(finalResponse);
+            }
+            ItemResponse finalResponse = new ItemResponse(listOfItems, calculateListPrice(listOfItems));
+            // listOfItems.clear();
+            return gson.toJsonTree(finalResponse);
         });
 
-        get("/items/:name", (request, response) -> {
-            return "The item is: " + request.params(":name");
+        delete("/remove", (request, response) -> {
+            if(listOfItems.size()>=1){
+                Product product = listOfItems.get(listOfItems.size()-1);
+                if(product.getQuantity() > 1){
+                    product.decreaseItem();
+                } else {
+                    listOfItems.remove(listOfItems.size()-1);
+                }
+            }
+            ItemResponse finalResponse = new ItemResponse(listOfItems, calculateListPrice(listOfItems));
+            return gson.toJsonTree(finalResponse);
         });
-
-        // post("/barcode", (request, response) -> {
-        //     String barcode = "123456789055";
-        //     Product test = fetchItem();
-        //     response.body(barcode);
-            
-            
-            
-        //     return response.body();
-
-        // });
 
         post("/creditCard", (request, response) -> {
             response.type("application/json");
-            Gson gson = new Gson();
 
-            CreditCard usersCard =  gson.fromJson(request.body(), CreditCard.class);
+            CreditCard usersCard = gson.fromJson(request.body(), CreditCard.class);
 
             String postUrl = "https://acme2pos.azurewebsites.net/payments";// put in your url
             
@@ -84,4 +106,16 @@ public class Main
         } 
         return 4567;  
     }
+
+    static double calculateListPrice(ArrayList<Product> items) {
+        double total = 0;
+        for (Product product : items) {
+            total += product.getTotalPrice();
+        }
+        return total;
+    }
+
+
+
+
 }
