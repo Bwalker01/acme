@@ -58,7 +58,7 @@ public class Main
             return gson.toJsonTree(finalResponse);
         });
 
-        delete("/remove", (request, response) -> {
+        delete("/barcode", (request, response) -> {
             if(listOfItems.size()>=1){
                 Product product = listOfItems.get(listOfItems.size()-1);
                 if(product.getQuantity() > 1){
