@@ -64,17 +64,13 @@ public class Main
                 for (Product product : listOfItems) {
                     DiscountBundle discountBundle = productDatabase.checkForBundle(product);
                     if(!discountBundle.equals("")){
-
+                        
                         OutputProduct item = new OutputProduct(discountBundle.getProduct().getName(),discountBundle.getTotalPrice(), discountBundle.getQuantity());
                         finalReciept.add(item);
                         System.out.println(gson.toJsonTree(finalReciept));
                     }
                     
-                    
-
-
-
-                    System.out.println(discountBundle);
+                    System.out.println(gson.toJsonTree(discountBundle));
                 }
             }
             ItemResponse finalResponse = new ItemResponse(listOfItems, calculateListPrice(listOfItems));

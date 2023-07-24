@@ -23,9 +23,9 @@ public class DiscountBundle {
         this.type = type;
         this.amount = round(amount);
         if (type == PERCENTAGE) {
-            this.totalPrice = round((product.getPrice() * quantity) * (1.0 - (amount / 100.0)));
+            this.totalPrice = round((product.getPrice() * product.getQuantity()) * (1.0 - (amount / 100.0)));
         } else if (type == PRICE) {
-            this.totalPrice = round((product.getPrice() * quantity) - amount);
+            this.totalPrice = round((product.getPrice() * product.getQuantity()) - amount);
         } else throw new InvalidDiscountBundleException("invalid Discount Type.");
     }
 
