@@ -4,6 +4,8 @@ import static spark.Spark.post;
 import static spark.Spark.delete;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+
 import com.acme.dataobjects.Barcodes;
 import com.acme.dataobjects.CreditCard;
 import com.acme.dataobjects.DiscountBundle;
@@ -41,6 +43,8 @@ public class Main
         // Gson gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().create();
         Gson gson = new Gson();
 
+        HashMap<Product, Integer> productsWithQuant = new HashMap<>();
+
     
 
         /*Setting the routes*/
@@ -48,16 +52,32 @@ public class Main
             ProductDAO productDatabase = new ProductDAO();
             Barcodes barcode = gson.fromJson(request.body(), Barcodes.class);
             if(!barcode.getBarcode().equals("END")){
-                for (Product product : listOfItems) {
-                    if (product.getBarcode().equals(barcode.getBarcode())) {
-                        product.increaseItem();
-              
-                        ItemResponse finalResponse = new ItemResponse(listOfItems, calculateListPrice(listOfItems));
-                        return gson.toJsonTree(finalResponse);
+
+
+                for (Product key : productsWithQuant.keySet()) {
+                    
+                        if(key.getBarcode().equals(barcode.getBarcode())){
+                            Integer value = productsWithQuant.get(key);   
+                            productsWithQuant.replace(key, value+1);
+                        }else{
+                            productsWithQuant.put(key, 1);
+                        }
+
+
                     }
-                }
+
+
+                // for (Product product : listOfItems) {
+                //     if (product.getBarcode().equals(barcode.getBarcode())) {
+                        
+                //         product.increaseItem();
+              
+                //         ItemResponse finalResponse = new ItemResponse(listOfItems, calculateListPrice(listOfItems));
+                //         return gson.toJsonTree(finalResponse);
+                //     }
+                // }
                 listOfItems.add(productDatabase.fetchItem(barcode.getBarcode()));
-                ItemResponse finalResponse = new ItemResponse(listOfItems, calculateListPrice(listOfItems));
+                ItemResponse finalResponse = new ItemResponse(productsWithQuant, calculateListPrice(productsWithQuant));
                 return gson.toJsonTree(finalResponse);
             }else{
                 ArrayList<OutputProduct> finalReciept = new ArrayList<OutputProduct>(); 
@@ -73,23 +93,23 @@ public class Main
                     System.out.println(gson.toJsonTree(discountBundle));
                 }
             }
-            ItemResponse finalResponse = new ItemResponse(listOfItems, calculateListPrice(listOfItems));
+            ItemResponse finalResponse = new ItemResponse(productsWithQuant, calculateListPrice(productsWithQuant));
             // listOfItems.clear();
             return gson.toJsonTree(finalResponse);
         });
 
-        delete("/barcode", (request, response) -> {
-            if(listOfItems.size()>=1){
-                Product product = listOfItems.get(listOfItems.size()-1);
-                if(product.getQuantity() > 1){
-                    product.decreaseItem();
-                } else {
-                    listOfItems.remove(listOfItems.size()-1);
-                }
-            }
-            ItemResponse finalResponse = new ItemResponse(listOfItems, calculateListPrice(listOfItems));
-            return gson.toJsonTree(finalResponse);
-        });
+        // delete("/barcode", (request, response) -> {
+        //     if(listOfItems.size()>=1){
+        //         Product product = listOfItems.get(listOfItems.size()-1);
+        //         if(product.getQuantity() > 1){
+        //             product.decreaseItem();
+        //         } else {
+        //             listOfItems.remove(listOfItems.size()-1);
+        //         }
+        //     }
+        //     ItemResponse finalResponse = new ItemResponse(listOfItems, calculateListPrice(listOfItems));
+        //     return gson.toJsonTree(finalResponse);
+        // });
 
         post("/creditCard", (request, response) -> {
             response.type("application/json");
@@ -127,10 +147,12 @@ public class Main
         return 4567;  
     }
 
-    static double calculateListPrice(ArrayList<Product> items) {
+    static double calculateListPrice(HashMap<Product, Integer> items) {
         double total = 0;
-        for (Product product : items) {
-            total += product.getTotalPrice();
+
+
+        for (Product key : items.keySet()) {
+            total += key.getPrice() * items.get(key);
         }
         return total;
     }

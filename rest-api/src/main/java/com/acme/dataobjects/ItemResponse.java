@@ -1,21 +1,22 @@
 package com.acme.dataobjects;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class ItemResponse {
-    private final ArrayList<Product> items;
+    private final HashMap<Product, Integer> items;
 
 
     private final double total;
 
-    public ItemResponse(ArrayList<Product> listOfItems, double total){
+    public ItemResponse(HashMap<Product, Integer> listOfItems, double total){
         this.items = listOfItems;
         this.total = total;
     }
 
 
 
-        public ArrayList<Product> getItem() {
+        public HashMap<Product, Integer> getItem() {
         return items;
     }
 

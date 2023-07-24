@@ -8,8 +8,7 @@ public class Product {
     private final transient String barcode;
     private final transient double eachPrice;
     private final String name;
-    private double price;
-    private int quantity;
+
 
     
     public Product(String barcode, String name, double price) {
@@ -17,8 +16,6 @@ public class Product {
         this.barcode = barcode;
         this.name = name;
         this.eachPrice = round(price);
-        this.price = this.eachPrice;
-        this.quantity = 1;
     }
 
     private static void validateProduct(String barcode, String name, double price) {
@@ -45,34 +42,8 @@ public class Product {
         return eachPrice;
     }
 
-    public double getTotalPrice() {
-        return price;
-    }
-
-    public int getQuantity() {
-        return quantity;
-    }
-
-    public void increaseItem() {
-        this.quantity++;
-        this.price += this.eachPrice;
-    }
-
-    public void decreaseItem() {
-        this.quantity--;
-        this.price -= this.eachPrice;
-    }
-
-    public void discountRemove(double discount){
-        this.price -= price;
-    }
-    
-
     public String getPriceString() {
         return String.format("£%.2f", this.eachPrice);
     }
 
-    public String getTotalPriceString() {
-        return String.format("£%.2f", this.price);
-    }
 }
