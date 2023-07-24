@@ -63,6 +63,11 @@ public class Product {
         this.price -= this.eachPrice;
     }
 
+    public void discountRemove(double discount){
+        this.price -= price;
+    }
+    
+
     public String getPriceString() {
         return String.format("£%.2f", this.eachPrice);
     }

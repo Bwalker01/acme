@@ -6,9 +6,12 @@ import static spark.Spark.delete;
 import java.util.ArrayList;
 import com.acme.dataobjects.Barcodes;
 import com.acme.dataobjects.CreditCard;
+import com.acme.dataobjects.DiscountBundle;
 import com.acme.dataobjects.ItemResponse;
+import com.acme.dataobjects.OutputProduct;
 import com.acme.dataobjects.Product;
 import com.google.gson.Gson;
+
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -18,6 +21,7 @@ import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.util.EntityUtils;
 import com.acme.database.ProductDAO;
+import com.acme.dataobjects.OutputProduct;
 
 
 
@@ -37,6 +41,8 @@ public class Main
         // Gson gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().create();
         Gson gson = new Gson();
 
+    
+
         /*Setting the routes*/
         post("/barcode", (request, response) -> {
             ProductDAO productDatabase = new ProductDAO();
@@ -45,6 +51,7 @@ public class Main
                 for (Product product : listOfItems) {
                     if (product.getBarcode().equals(barcode.getBarcode())) {
                         product.increaseItem();
+              
                         ItemResponse finalResponse = new ItemResponse(listOfItems, calculateListPrice(listOfItems));
                         return gson.toJsonTree(finalResponse);
                     }
@@ -52,6 +59,23 @@ public class Main
                 listOfItems.add(productDatabase.fetchItem(barcode.getBarcode()));
                 ItemResponse finalResponse = new ItemResponse(listOfItems, calculateListPrice(listOfItems));
                 return gson.toJsonTree(finalResponse);
+            }else{
+                ArrayList<OutputProduct> finalReciept = new ArrayList<OutputProduct>(); 
+                for (Product product : listOfItems) {
+                    DiscountBundle discountBundle = productDatabase.checkForBundle(product);
+                    if(!discountBundle.equals("")){
+
+                        OutputProduct item = new OutputProduct(discountBundle.getProduct().getName(),discountBundle.getTotalPrice(), discountBundle.getQuantity());
+                        finalReciept.add(item);
+                        System.out.println(gson.toJsonTree(finalReciept));
+                    }
+                    
+                    
+
+
+
+                    System.out.println(discountBundle);
+                }
             }
             ItemResponse finalResponse = new ItemResponse(listOfItems, calculateListPrice(listOfItems));
             // listOfItems.clear();
