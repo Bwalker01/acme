@@ -3,7 +3,6 @@ import static spark.Spark.port;
 import static spark.Spark.post;
 import static spark.Spark.delete;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 
 import com.acme.dataobjects.Barcodes;
@@ -23,7 +22,6 @@ import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.util.EntityUtils;
 import com.acme.database.ProductDAO;
-import com.acme.dataobjects.OutputProduct;
 
 
 
@@ -37,64 +35,31 @@ public class Main
         /*Initialising Listening Port*/
         port(getHerokuAssignedPort());
         
-
-        /*setting global variables/objects*/
-        ArrayList<Product> listOfItems = new ArrayList<Product>(); 
-        // Gson gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().create();
         Gson gson = new Gson();
 
-        HashMap<Product, Integer> productsWithQuant = new HashMap<>();
-
+        HashMap<Product, Integer> items = new HashMap<>();
+        ProductDAO productDatabase = new ProductDAO();
     
 
         /*Setting the routes*/
         post("/barcode", (request, response) -> {
-            ProductDAO productDatabase = new ProductDAO();
-            Barcodes barcode = gson.fromJson(request.body(), Barcodes.class);
-            if(!barcode.getBarcode().equals("END")){
-
-
-                for (Product key : productsWithQuant.keySet()) {
-                    
-                        if(key.getBarcode().equals(barcode.getBarcode())){
-                            Integer value = productsWithQuant.get(key);   
-                            productsWithQuant.replace(key, value+1);
-                        }else{
-                            productsWithQuant.put(key, 1);
-                        }
-
-
+            String barcode = gson.fromJson(request.body(), Barcodes.class).getBarcode();
+            System.out.println(barcode);
+            if(barcode.equals("END")) {
+                System.out.println("end");
+            } else {
+                for (Product key : items.keySet()) {
+                    if(key.getBarcode().equals(barcode)) {
+                        items.replace(key, items.get(key)+1);
+                        ItemResponse finalResponse = new ItemResponse(items);
+                        return gson.toJsonTree(finalResponse);
                     }
-
-
-                // for (Product product : listOfItems) {
-                //     if (product.getBarcode().equals(barcode.getBarcode())) {
-                        
-                //         product.increaseItem();
-              
-                //         ItemResponse finalResponse = new ItemResponse(listOfItems, calculateListPrice(listOfItems));
-                //         return gson.toJsonTree(finalResponse);
-                //     }
-                // }
-                listOfItems.add(productDatabase.fetchItem(barcode.getBarcode()));
-                ItemResponse finalResponse = new ItemResponse(productsWithQuant, calculateListPrice(productsWithQuant));
-                return gson.toJsonTree(finalResponse);
-            }else{
-                ArrayList<OutputProduct> finalReciept = new ArrayList<OutputProduct>(); 
-                for (Product product : listOfItems) {
-                    DiscountBundle discountBundle = productDatabase.checkForBundle(product);
-                    if(!discountBundle.equals("")){
-                        
-                        OutputProduct item = new OutputProduct(discountBundle.getProduct().getName(),discountBundle.getTotalPrice(), discountBundle.getQuantity());
-                        finalReciept.add(item);
-                        System.out.println(gson.toJsonTree(finalReciept));
-                    }
-                    
-                    System.out.println(gson.toJsonTree(discountBundle));
                 }
+                items.put(productDatabase.fetchItem(barcode), 1);
+                ItemResponse finalResponse = new ItemResponse(items);
+                return gson.toJsonTree(finalResponse);
             }
-            ItemResponse finalResponse = new ItemResponse(productsWithQuant, calculateListPrice(productsWithQuant));
-            // listOfItems.clear();
+            ItemResponse finalResponse = new ItemResponse(items);
             return gson.toJsonTree(finalResponse);
         });
 
