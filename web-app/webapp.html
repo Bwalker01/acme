@@ -1,0 +1,92 @@
+﻿<!doctype html>
+<html>
+<head>
+    <title>ACME<</title>
+</head>
+<body>
+    <h1>ACME</h1>
+
+    <p><em>Enter barcodes, view/edit current basket and send off card payment details.</em></p><hr>
+
+    <form action="submit barcode button action placeholder">
+        <label for="barcode">Enter Barcode:</label><br>
+        <input type="text" id="barcode" name="barcode"><br>
+        <input type="button" value="Submit Barcode" onClick="submitBarcode()">
+    </form>
+
+    <p>Enter "END" to signal the end of item scanning</p><br>
+
+    <label for="textarea">Recieved JSON</label>
+    <textarea id="textarea" name="message" rows="10" cols="30">EXAMPLE JSON
+
+{
+
+"items":[
+
+{"name":"Item A", "price":2.50, "quantity":5},
+
+{"name":"Item B", "price":5.50, "quantity":1},
+
+],
+
+"total":8.00
+
+}</textarea><hr>
+
+    <h2>Item Basket</h2>
+
+    <table style="width:50%">
+        <tr>
+            <th>Item Name</th>
+            <th style="width:15%">Quantity</th>
+            <th style="width:10%">Price</th>
+        </tr>
+
+        <tbody id="itemTable">
+        </tbody>
+
+    </table>
+
+    <p>Total Price: �8.00</p>
+    <p><em>(Discount Savings: �0.25)</em></p>
+
+    <h4>Remove Item</h4>
+
+    <form>
+        <label for="removeItemName">Item Name:</label><br>
+        <select id='removeItemName' name='removeItemName' onClick="getFoodItem()">
+            <option value="selectItem">--Select--</option>
+        </select><br>
+
+        <input type="button" value="Remove Item">
+    </form><br><hr>
+
+
+    <form action="submit payment button action placeholder">
+        <fieldset>
+            <legend>Payment Details:</legend>
+            <label for="accHolderName">Account Holder Name:</label><br>
+            <input type="text" id="accHolderName" name="accHolderName"><br><br>
+
+            <label for="creditCardNumber">Credit Card Number:</label><br>
+            <input type="text" id="creditCardNumber" name="creditCardNumber"><br><br>
+
+            <label for="expiryDate">Expiry Date:</label><br>
+            <input type="text" id="expiryDate" name="expiryDate"><br><br>
+
+            <label for="cvc">CVC:</label><br>
+            <input type="text" id="cvc" name="cvc"><br><br>
+
+            <label for="address">Address:</label><br>
+            <input type="text" id="address" name="address"><br><br>
+
+            <label for="postcode">Postcode:</label><br>
+            <input type="text" id="postcode" name="postcode"><br><br>
+
+            <input type="button" value="Submit Payment">
+        </fieldset>
+    </form>
+
+    <script src="webapp.js"></script>
+</body>
+</html>
