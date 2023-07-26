@@ -1,0 +1,16 @@
+{
+  "ExpandedNodes": [
+    "",
+    "\\rest-api",
+    "\\rest-api\\src",
+    "\\rest-api\\src\\main",
+    "\\rest-api\\src\\main\\java",
+    "\\rest-api\\src\\main\\java\\com",
+    "\\rest-api\\src\\main\\java\\com\\acme",
+    "\\rest-api\\src\\main\\java\\com\\acme\\dataobjects",
+    "\\rest-api\\src\\main\\java\\com\\acme\\exceptions",
+    "\\rest-api\\src\\main\\java\\com\\acme\\utility"
+  ],
+  "SelectedNode": "\\web-app\\webapp.js",
+  "PreviewInSolutionExplorer": false
+}

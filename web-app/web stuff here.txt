@@ -1,1 +1,6 @@
 Use this folder for the webstuff
+
+- enter barcode text input, submit button, display recieved JSON object besides it
+- display list of items in non-JSON form
+- delete option for item in list/"basket"
+- text input fields for card payment, "submit" button
