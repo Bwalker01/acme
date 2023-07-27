@@ -8,7 +8,7 @@
 
     <p><em>Enter barcodes, view/edit current basket and send off card payment details.</em></p><hr>
 
-    <form action="submit barcode button action placeholder">
+    <form>
         <label for="barcode">Enter Barcode:</label><br>
         <input type="text" id="barcode" name="barcode"><br>
         <input type="button" value="Submit Barcode" onClick="submitBarcode()">
@@ -47,8 +47,8 @@
 
     </table>
 
-    <p>Total Price: �8.00</p>
-    <p><em>(Discount Savings: �0.25)</em></p>
+    <p id="totalPrice">Total Price: £0.00</p>
+    <p id="discountSavings"><em>(Discount Savings: £0.00)</em></p>
 
     <h4>Remove Item</h4>
 
@@ -62,7 +62,7 @@
     </form><br><hr>
 
 
-    <form action="submit payment button action placeholder">
+    <form>
         <fieldset>
             <legend>Payment Details:</legend>
             <label for="accHolderName">Account Holder Name:</label><br>
@@ -83,7 +83,7 @@
             <label for="postcode">Postcode:</label><br>
             <input type="text" id="postcode" name="postcode"><br><br>
 
-            <input type="button" value="Submit Payment">
+            <input type="button" value="Submit Payment" onclick="submitPayment()">
         </fieldset>
     </form>
 
