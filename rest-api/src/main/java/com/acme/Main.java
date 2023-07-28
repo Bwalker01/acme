@@ -104,6 +104,7 @@ public class Main {
         });
 
         post("/creditCard", (request, response) -> {
+            response.status(200);
             response.type("application/json");
 
             CreditCard usersCard = gson.fromJson(request.body(), CreditCard.class);
