@@ -75,14 +75,14 @@ public class DBController {
         }
     }
 
-    public String[] getDiscount(String barcode, int quantity) {
+    public String[] getDiscount(String barcode) {
         if (Arrays.stream(invalidChars).anyMatch(barcode::contains)) {
             throw new DatabaseConnectionError("Barcode contains invalid characters");
         }
         try {
             Statement st = connection.createStatement();
             ResultSet rs = st.executeQuery(
-                String.format("SELECT id, barcode, quantity, is_percentage, discount_amount FROM discounts WHERE barcode = '%s' AND quantity = %d", barcode, quantity)
+                String.format("SELECT id, barcode, quantity, is_percentage, discount_amount FROM discounts WHERE barcode = '%s'", barcode)
             );
             if (rs.next()) {
                 return readResults(rs).toArray(new String[0]);

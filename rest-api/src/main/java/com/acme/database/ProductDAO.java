@@ -27,9 +27,9 @@ public class ProductDAO implements DAOInterface {
         return new Product(results[0], results[1], Double.parseDouble(results[2]));
     }
 
-    public DiscountBundle checkForBundle(Product product, int quantity) {
+    public DiscountBundle checkForBundle(Product product) {
         db.connect();
-        String[] results = db.getDiscount(product.getBarcode(), quantity);
+        String[] results = db.getDiscount(product.getBarcode());
         db.disconnect();
         if (results == null) {
             return null;
