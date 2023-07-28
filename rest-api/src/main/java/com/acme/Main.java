@@ -51,29 +51,28 @@ public class Main
             System.out.println(barcode);
             if(barcode.equals("END")) {
                 System.out.println("end");
-                for (Product key : items.keySet()) {
-                    DiscountBundle discountBundle = productDatabase.checkForBundle(key);
+                // for (Product key : items.keySet()) {
+                //     DiscountBundle discountBundle = productDatabase.checkForBundle(key);
                     
 
-                    if(!discountBundle.equals(null)){
-                        int amount = discountBundle.getQuantity();
+                //     if(!discountBundle.equals(null)){
+                //         int amount = discountBundle.getQuantity();
 
-                        int calcAmount = amount % quantity;
+                //         int calcAmount = amount % quantity;
 
-                        int finalAmount = (quantity - calcAmount) / amount; 
+                //         int finalAmount = (quantity - calcAmount) / amount; 
 
-                        discountBundleMap.put(discountBundle, finalAmount);
-                    }
+                //         discountBundleMap.put(discountBundle, finalAmount);
+                //     }
                     
                     
 
-                    ItemResponse responses = new ItemResponse(items);
+                //     ItemResponse responses = new ItemResponse(items);
                         
                         
-                    System.out.println(gson.toJsonTree(responses));
-                    
-                    
-                }
+                //     System.out.println(gson.toJsonTree(responses));
+                
+                //}
             } else {
                 for (Product key : items.keySet()) {
                     if(key.getBarcode().equals(barcode)) {
@@ -90,18 +89,25 @@ public class Main
             return gson.toJsonTree(finalResponse);
         });
 
-        // delete("/barcode", (request, response) -> {
-        //     if(listOfItems.size()>=1){
-        //         Product product = listOfItems.get(listOfItems.size()-1);
-        //         if(product.getQuantity() > 1){
-        //             product.decreaseItem();
-        //         } else {
-        //             listOfItems.remove(listOfItems.size()-1);
-        //         }
-        //     }
-        //     ItemResponse finalResponse = new ItemResponse(listOfItems, calculateListPrice(listOfItems));
-        //     return gson.toJsonTree(finalResponse);
-        // });
+        delete("/barcode", (request, response) -> {
+            String barcode = gson.fromJson(request.body(), Barcodes.class).getBarcode();
+            if(items.size()>=1){
+
+                for(Product product: items.keySet()){
+                    if(product.getBarcode().equals(barcode)){
+                        if(items.get(product) == 1){
+                            items.remove(product);
+                        }else{
+                            items.replace(product, items.get(product)-1);
+                        }
+
+                    }
+                }
+                    
+            }
+                ItemResponse finalResponse = new ItemResponse(items);
+                return gson.toJsonTree(finalResponse);
+        });
 
         post("/creditCard", (request, response) -> {
             response.type("application/json");
