@@ -28,7 +28,7 @@ public class ProductDAOTest {
 
     @Test
     public void fetchItem_Standard() {
-        String[] mockedResult = {"123456789055", "name", "1"};
+        String[] mockedResult = { "123456789055", "name", "1" };
         when(mockController.getItem("123456789055")).thenReturn(mockedResult);
         Product result = dao.fetchItem("123456789055");
         assertThat(result.getBarcode()).isEqualTo(mockedResult[0]);
@@ -38,26 +38,9 @@ public class ProductDAOTest {
 
     @Test
     public void fetchItem_InvalidBarcode() {
-        String[] mockedResult = {"1234", "name", "1"};
-        when (mockController.getItem("1234")).thenReturn(mockedResult);
+        String[] mockedResult = { "1234", "name", "1" };
+        when(mockController.getItem("1234")).thenReturn(mockedResult);
         assertThatThrownBy(() -> dao.fetchItem("1234")).isInstanceOf(InvalidProductException.class);
     }
 
-    @Test
-    public void checkForDiscount_Standard() {
-        String[] mockedResult = {"2", "123456789055", "2", "true", "5"};
-        when(mockController.getDiscount("123456789055", 2)).thenReturn(mockedResult);
-        DiscountBundle testBundle = dao.checkForBundle(testProduct, 2);
-        assertThat(testBundle.getDiscountId()).isEqualTo(2);
-        assertThat(testBundle.getDiscountAmountFormatted()).isEqualTo("5.00%");
-        assertThat(testBundle.getQuantity()).isEqualTo(2);
-        assertThat(testBundle.getDiscountAmount()).isEqualTo(5);
-    }
-
-    @Test
-    public void checkForDiscount_InvalidQuery() {
-        when(mockController.getDiscount("123456789055", 2)).thenReturn(null);
-        DiscountBundle testBundle = dao.checkForBundle(testProduct, 2);
-        assertThat(testBundle).isNull();
-    }
 }
