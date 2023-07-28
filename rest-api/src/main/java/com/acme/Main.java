@@ -55,7 +55,7 @@ public class Main
                 return gson.toJsonTree(finalResponse);
             }
             ItemResponse finalResponse = new ItemResponse(listOfItems, calculateListPrice(listOfItems));
-            // listOfItems.clear();
+            System.out.println(gson.toJsonTree(finalResponse));
             return gson.toJsonTree(finalResponse);
         });
 
