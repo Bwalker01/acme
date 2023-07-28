@@ -3,6 +3,7 @@ package com.acme;
 import static spark.Spark.port;
 import static spark.Spark.post;
 import static spark.Spark.delete;
+import static spark.Spark.after;
 
 import java.util.HashMap;
 
@@ -13,6 +14,8 @@ import com.acme.dataobjects.ItemResponse;
 import com.acme.dataobjects.OutputProduct;
 import com.acme.dataobjects.Product;
 import com.google.gson.Gson;
+
+import spark.Filter;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -36,6 +39,14 @@ public class Main {
         HashMap<Product, Integer> items = new HashMap<>();
         ProductDAO productDatabase = new ProductDAO();
         // HashMap<DiscountBundle, Integer> discountBundleMap = new HashMap<>();
+
+        after((Filter) (request, response) -> {
+            response.header("Access-Control-Allow-Origin", "*");
+            response.header("Access-Control-Allow-Methods", "POST,DELETE");
+            response.header("Access-Control-Allow-Headers", "Content-Type");
+            response.header("Access-Control-Allow-Credentials", "true");
+            response.header("Content-Type", "application/json");
+        });
 
         /* Setting the routes */
         post("/barcode", (request, response) -> {
@@ -66,23 +77,15 @@ public class Main {
                         items.replace(key, items.get(key) + 1);
                         ItemResponse finalResponse = new ItemResponse(items);
                         response.status(200);
-                        response.header("Content-Type", "application/json");
-                        response.header("Access-Control-Allow-Origin", "*");
                         return gson.toJsonTree(finalResponse);
                     }
                 }
                 items.put(productDatabase.fetchItem(barcode), 1);
                 ItemResponse finalResponse = new ItemResponse(items);
                 response.status(200);
-                response.header("Content-Type", "application/json");
-                response.header("Access-Control-Allow-Origin", "*");
                 return gson.toJsonTree(finalResponse);
             }
-            ItemResponse finalResponse = new ItemResponse(items);
-            response.body(gson.toJson(finalResponse));
-            response.status(200);
-            response.header("Content-Type", "application/json");
-            return response;
+            return null;
         });
 
         delete("/barcode", (request, response) -> {
@@ -100,6 +103,7 @@ public class Main {
                 }
             }
             ItemResponse finalResponse = new ItemResponse(items);
+            response.status(200);
             return gson.toJsonTree(finalResponse);
         });
 
