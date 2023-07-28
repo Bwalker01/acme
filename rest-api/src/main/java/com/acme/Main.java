@@ -39,6 +39,7 @@ public class Main
 
         /*Setting the routes*/
         post("/barcode", (request, response) -> {
+            response.status(200);
             ProductDAO productDatabase = new ProductDAO();
             Barcodes barcode = gson.fromJson(request.body(), Barcodes.class);
             if(!barcode.getBarcode().equals("END")){
@@ -54,11 +55,12 @@ public class Main
                 return gson.toJsonTree(finalResponse);
             }
             ItemResponse finalResponse = new ItemResponse(listOfItems, calculateListPrice(listOfItems));
-            // listOfItems.clear();
+            System.out.println(gson.toJsonTree(finalResponse));
             return gson.toJsonTree(finalResponse);
         });
 
         delete("/barcode", (request, response) -> {
+            response.status(200);
             if(listOfItems.size()>=1){
                 Product product = listOfItems.get(listOfItems.size()-1);
                 if(product.getQuantity() > 1){
@@ -72,6 +74,7 @@ public class Main
         });
 
         post("/creditCard", (request, response) -> {
+            response.status(200);
             response.type("application/json");
 
             CreditCard usersCard = gson.fromJson(request.body(), CreditCard.class);
