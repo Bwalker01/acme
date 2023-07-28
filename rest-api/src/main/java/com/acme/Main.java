@@ -14,6 +14,7 @@ import com.acme.dataobjects.Product;
 import com.google.gson.Gson;
 
 
+
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
@@ -22,6 +23,7 @@ import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.util.EntityUtils;
 import com.acme.database.ProductDAO;
+
 
 
 
@@ -39,6 +41,8 @@ public class Main
 
         HashMap<Product, Integer> items = new HashMap<>();
         ProductDAO productDatabase = new ProductDAO();
+        HashMap<DiscountBundle, Integer> discountBundleMap = new HashMap<>();
+        
     
 
         /*Setting the routes*/
@@ -47,6 +51,29 @@ public class Main
             System.out.println(barcode);
             if(barcode.equals("END")) {
                 System.out.println("end");
+                for (Product key : items.keySet()) {
+                    DiscountBundle discountBundle = productDatabase.checkForBundle(key);
+                    
+
+                    if(!discountBundle.equals(null)){
+                        int amount = discountBundle.getQuantity();
+
+                        int calcAmount = amount % quantity;
+
+                        int finalAmount = (quantity - calcAmount) / amount; 
+
+                        discountBundleMap.put(discountBundle, finalAmount);
+                    }
+                    
+                    
+
+                    ItemResponse responses = new ItemResponse(items);
+                        
+                        
+                    System.out.println(gson.toJsonTree(responses));
+                    
+                    
+                }
             } else {
                 for (Product key : items.keySet()) {
                     if(key.getBarcode().equals(barcode)) {
